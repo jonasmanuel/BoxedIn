@@ -1,0 +1,50 @@
+.gmail {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    overflow: hidden;
+    text-align: left;
+    position: relative;
+}
+
+.buttons {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.messages, .labelView {
+    width: 50vw;
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    overflow-y: auto;
+}
+
+
+
+.message {
+    width: 50vw;
+    border-bottom: 1px solid lightgrey;
+    background-color: rgba(51,51,51,0.902);
+}
+
+.message.threaded {
+    margin-left: 1em;
+    width: calc(50vw - 1em);
+}
+
+.message.read {
+    background-color: #000;
+}
+
+.snippet {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.LabelGroup {
+    display: flex;
+
+}

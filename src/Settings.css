@@ -1,0 +1,8 @@
+.settings {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    overflow: hidden;
+    text-align: left;
+    position: relative;
+}
