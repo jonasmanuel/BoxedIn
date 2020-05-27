@@ -30,7 +30,7 @@ class BundleView extends React.Component<Props,{labels: any[]}> {
             labels: []
         }
 
-        this.cache = new NetworkFirst(keys.CACHE_LABLES);
+        this.cache = new NetworkFirst(keys.CACHE_LABELS);
     }
 
     componentDidMount() {
@@ -48,7 +48,7 @@ class BundleView extends React.Component<Props,{labels: any[]}> {
                     params: {}
                 }));
             });
-            return this.cache.get("ALL-LABELS", batch).then((responses: {result: {result : any}}) => {
+            return this.cache.get(keys.CACHE_ALL_LABELS, batch).then((responses: {result: {result : any}}) => {
                 return Object.values(responses.result).map(response => response.result);
             }, error => {
                 console.log(error);

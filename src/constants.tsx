@@ -4,4 +4,4 @@ export const categories = ['category:primary', 'category:social', 'category:prom
 export const noShow = stateLabels.concat(systemFolders);
 export const INBOX = 'INBOX';
 export const defaultSettings = { labels: {}, bundleLabels: {}, sortLabel: {} }
-export const keys = { settings: 'settings', CACHE_ALL_LABELS: 'ALL_LABLES', CACHE_LABLES: 'LABLES', CACHE_THREADS: "THREADS", CACHE_BUNDLES: 'BUNDLES', CACHE_ATTACHMENTS: 'ATTACHMENTS' }
+export const keys = { settings: 'settings', CACHE_ALL_LABELS: 'ALL-LABELS', CACHE_LABELS: 'LABELS', CACHE_THREADS: "THREADS", CACHE_BUNDLES: 'BUNDLES', CACHE_ATTACHMENTS: 'ATTACHMENTS' }

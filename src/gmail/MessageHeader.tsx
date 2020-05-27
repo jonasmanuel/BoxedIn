@@ -1,12 +1,10 @@
 import React from 'react';
 import { Avatar } from '@material-ui/core';
 import translate from '../translations';
+import { arrayToMap } from '../utils';
 
 export function headerMap(headers: [{name: string, value: any}]) {
-    return headers.reduce((headerMap, header) => {
-        headerMap[header.name] = header.value;
-        return headerMap;
-    }, {} as {[key: string]: any});
+    return arrayToMap(headers, header => header.name, header => header.value);
 }
 
 export default class MessageHeader extends React.Component<{message: any, noOfMessages: number, isThread?: boolean}> {
@@ -31,14 +29,14 @@ export default class MessageHeader extends React.Component<{message: any, noOfMe
                     <div title={from[1]}><b>{from[0]}</b>{noOfMessages > 1 ? noOfMessages : ""}</div>
                     <div><b>Subject:</b> {subject}</div>
                     <div title={message.snippet} className="snippet">{message.snippet}</div>
-                    {this.props.message.labelIds.map((label : string )=> <Label name={translate(label)}></Label>)}
+                    {this.props.message.labelIds.map((label : string )=> <Tag text={translate(label)}></Tag>)}
                 </div>
             </div>
         )
     }
 }
 
-export function Label(props:{textColor?: string, backgroundColor?: string, name: string}) {
+export function Tag(props:{textColor?: string, backgroundColor?: string, text: string}) {
     const style = {
         color: props.textColor || 'black',
         background: props.backgroundColor || 'white',
@@ -47,5 +45,5 @@ export function Label(props:{textColor?: string, backgroundColor?: string, name:
         marginRight: '0.5em',
         padding: '0 5px'
     }
-    return <div style={style} >{props.name}</div>
+    return <div style={style} >{props.text}</div>
 }

@@ -4,7 +4,8 @@ import './Settings.css';
 import TransferList from './components/TransferList';
 import CacheFirst from './requestCache';
 import translate from './translations';
-import { noShow, defaultSettings, keys } from './constants';
+import { noShow, defaultSettings, keys, categories } from './constants';
+import { arrayToMap } from './utils';
 
 
 interface Props {
@@ -23,22 +24,18 @@ export default class Settings extends React.Component<Props, State> {
         super(props)
         this.state = lsget(keys.settings) || defaultSettings;
 
-        this.cache = new CacheFirst(keys.CACHE_LABLES);
+        this.cache = new CacheFirst(keys.CACHE_LABELS);
     }
 
     componentDidMount() {
-        this.cache.get("ALL-LABELS").then((responses: { result: [{ result: { id: string, name: string } }] }) => {
+        this.cache.get(keys.CACHE_ALL_LABELS).then((responses: { result: [{ result: { id: string, name: string } }] }) => {
             return Object.values(responses.result)
                 .map(response => response.result)
                 .filter(label => !noShow.includes(label.id))
+                .filter(label => !categories.includes(label.id.replace("_",":").toLowerCase()))
                 .sort((a, b) => translate(a.name) > translate(b.name) ? 1 : -1);
         }).then((labels: any[]) => {
-            //TODO filter categories from labels
-
-            let labelMap = labels.reduce((m, label) => {
-                m[label.id] = label
-                return m
-            }, {});
+            let labelMap = arrayToMap(labels, label=>label.id, label=>label);
             let unchosen: any = {}
             for (let key in labelMap) {
                 if (!this.state.bundleLabels[key]) {

@@ -23,7 +23,7 @@ class InboxView extends React.Component<Props, {settings: any, threads: any[], l
             threads: [],
             labels: []
         }
-        this.labelCache = new CacheFirst(keys.CACHE_LABLES);
+        this.labelCache = new CacheFirst(keys.CACHE_LABELS);
         this.threadCache = new NetworkFirst(keys.CACHE_THREADS);
     }
 

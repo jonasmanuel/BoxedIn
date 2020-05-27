@@ -82,7 +82,7 @@ class LabelGroup extends React.Component<Props, {name: string, unread: number, o
                     <ListItemText primary={translate(this.state.name)} secondary={this.state.unread}></ListItemText>
                     {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <Collapse in={this.state.open} timeout="auto" mountOnEnter>
+                <Collapse in={this.state.open} timeout="auto" mountOnEnter unmountOnExit>
                     <ThreadList threads={this.state.threads} gmailApi={this.props.gmailApi}></ThreadList>
                 </Collapse>
             </>
