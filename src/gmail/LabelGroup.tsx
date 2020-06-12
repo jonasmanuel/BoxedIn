@@ -8,16 +8,14 @@ import translate from '../translations';
 import ThreadList from './ThreadList';
 import { NetworkFirst } from '../requestCache';
 import { keys } from '../constants';
-import { ILabel } from './BundleView';
+import gmailInstance, { ILabel, IThread } from './gmailAPI';
 
 interface Props {
     label?: ILabel,
     category?: string,
-    gmailApi: any,
 }
 
-class LabelGroup extends React.Component<Props, {name: string, unread: number, open: boolean, threads: any[], labelColors?: any}> {
-    cache: NetworkFirst;
+class LabelGroup extends React.Component<Props, { name: string, unread: number, open: boolean, threads: IThread[], labelColors?: any }> {
     constructor(props: Props) {
         super(props)
         let labelColors = {}
@@ -40,36 +38,40 @@ class LabelGroup extends React.Component<Props, {name: string, unread: number, o
             threads: [],
             labelColors
         }
-
-        this.cache = new NetworkFirst(keys.CACHE_BUNDLES);
-
     }
 
     componentDidMount() {
-        let request = null;
+        let labelIds = ['INBOX'];
+        let query;
         if (this.props.label) {
-            request = this.props.gmailApi.threads.list({
-                userId: 'me',
-                labelIds: ['INBOX', this.props.label.id],
-            })
+            labelIds.push(this.props.label.id);
         } else if (this.props.category) {
-            request = this.props.gmailApi.threads.list({
-                userId: 'me',
-                q: this.props.category,
-                labelIds: ['INBOX'],
-            })
+            query = this.props.category;
         }
-        this.cache.get(this.state.name.replace(":","_"), request).then(response => {
-            if (response.result.threads) {
-                this.setState({ threads: response.result.threads, unread: response.result.resultSizeEstimate })
+        gmailInstance.listThreads(this.state.name.replace(":", "_"), query, labelIds).then(result => {
+            let { threads, resultSizeEstimate } = result;
+            if (threads) {
+                this.setState({ threads, unread: resultSizeEstimate })
             } else {
-                this.setState({ unread: 0 })
+                this.setState({ unread: resultSizeEstimate })
             }
         })
 
     }
-    handleClick() {
+    toggleOpen() {
         this.setState({ open: !this.state.open });
+    }
+
+    archiveThread(id: string){
+        gmailInstance.archiveThread(id).then(_ =>{
+            this.setState({threads: this.state.threads.filter(thread => thread.id !== id)})
+        })
+    }
+
+    archive(){
+        gmailInstance.archiveThreads(this.state.threads.map(thread=>thread.id)).then(_=>{
+            
+        });
     }
 
     render() {
@@ -78,12 +80,12 @@ class LabelGroup extends React.Component<Props, {name: string, unread: number, o
         }
         return (
             <>
-                <ListItem style={this.state.labelColors} button onClick={this.handleClick.bind(this)}>
+                <ListItem style={this.state.labelColors} button onClick={this.toggleOpen.bind(this)}>
                     <ListItemText primary={translate(this.state.name)} secondary={this.state.unread}></ListItemText>
                     {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <Collapse in={this.state.open} timeout="auto" mountOnEnter>
-                    <ThreadList threads={this.state.threads} gmailApi={this.props.gmailApi}></ThreadList>
+                <Collapse style={{paddingLeft: "1em"}} in={this.state.open} timeout={100} mountOnEnter>
+                    <ThreadList threads={this.state.threads} archiveThread={this.archiveThread.bind(this)}></ThreadList>
                 </Collapse>
             </>
         )

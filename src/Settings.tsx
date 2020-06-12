@@ -4,49 +4,50 @@ import './Settings.css';
 import TransferList from './components/TransferList';
 import CacheFirst from './requestCache';
 import translate from './translations';
-import { noShow, defaultSettings, keys } from './constants';
+import { noShow, defaultSettings, keys, categories } from './constants';
+import { arrayToMap } from './utils';
+import gmailInstance from './gmail/gmailAPI';
 
 
 interface Props {
-
+    onActivation: (title: string) => void
 }
 
 interface State {
     labels: any,
     bundleLabels: any,
-    sortLabel: any
+    sortLabel: any,
 }
 
 export default class Settings extends React.Component<Props, State> {
     cache: CacheFirst;
+
     constructor(props: Readonly<Props>) {
         super(props)
         this.state = lsget(keys.settings) || defaultSettings;
-
-        this.cache = new CacheFirst(keys.CACHE_LABLES);
+        this.cache = new CacheFirst(keys.CACHE_LABELS);
+        props.onActivation("Settings");
     }
 
     componentDidMount() {
-        this.cache.get("ALL-LABELS").then((responses: { result: [{ result: { id: string, name: string } }] }) => {
-            return Object.values(responses.result)
-                .map(response => response.result)
-                .filter(label => !noShow.includes(label.id))
-                .sort((a, b) => translate(a.name) > translate(b.name) ? 1 : -1);
-        }).then((labels: any[]) => {
-            //TODO filter categories from labels
-
-            let labelMap = labels.reduce((m, label) => {
-                m[label.id] = label
-                return m
-            }, {});
-            let unchosen: any = {}
-            for (let key in labelMap) {
-                if (!this.state.bundleLabels[key]) {
-                    unchosen[key] = labelMap[key];
-                }
+        gmailInstance.onSignInStatusChanged(isSignedIn => {
+            if (isSignedIn) {
+                gmailInstance.listAllLabels().then(labels => {
+                    return labels.filter(label => !noShow.includes(label.id))
+                        .filter(label => !categories.includes(label.id.replace("_", ":").toLowerCase()))
+                        .sort((a, b) => translate(a.name) > translate(b.name) ? 1 : -1);
+                }).then(labels => {
+                    let labelMap = arrayToMap(labels, label => label.id, label => label);
+                    let unchosen: any = {}
+                    for (let key in labelMap) {
+                        if (!this.state.bundleLabels[key]) {
+                            unchosen[key] = labelMap[key];
+                        }
+                    }
+                    this.setState({ labels: unchosen });
+                });
             }
-            this.setState({ labels: unchosen });
-        });
+        })
     }
 
     componentWillUnmount() {

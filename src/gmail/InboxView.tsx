@@ -1,19 +1,18 @@
 import React from 'react'
-import {get as lsget} from 'local-storage'
-import { systemFolders, keys, defaultSettings, categories } from '../constants'
+import { get as lsget } from 'local-storage'
+import { systemFolders, keys, ISettings, defaultSettings, categories } from '../constants'
 import CacheFirst, { NetworkFirst } from '../requestCache'
 import ThreadList from './ThreadList'
 import { List } from "@material-ui/core";
 import { withStyles } from '@material-ui/core'
 import LabelGroup from './LabelGroup'
-import { ILabel } from './BundleView'
+import gmailInstance, { ILabel } from './gmailAPI';
 
 interface Props {
-    classes: any,
-    gmailApi: any
+    classes: any
 }
 
-class InboxView extends React.Component<Props, {settings: any, threads: any[], labels: ILabel[]}> {
+class InboxView extends React.Component<Props, { settings: ISettings, threads: any[], labels: ILabel[] }> {
     labelCache: CacheFirst
     threadCache: NetworkFirst
     constructor(props: Props) {
@@ -23,7 +22,7 @@ class InboxView extends React.Component<Props, {settings: any, threads: any[], l
             threads: [],
             labels: []
         }
-        this.labelCache = new CacheFirst(keys.CACHE_LABLES);
+        this.labelCache = new CacheFirst(keys.CACHE_LABELS);
         this.threadCache = new NetworkFirst(keys.CACHE_THREADS);
     }
 
@@ -38,51 +37,39 @@ class InboxView extends React.Component<Props, {settings: any, threads: any[], l
             .map(label => label.name)
             .concat(systemFolders)
             .map(label => `NOT label:${label}`)
-            .concat(categories.map(category=>`NOT ${category}`)).join(" ")
-          //  filter = categories.map(category=>`NOT ${category}`).join(" ");
+            .concat(categories.map(category => `NOT ${category}`)).join(" ")
+        //  filter = categories.map(category=>`NOT ${category}`).join(" ");
         return filter;
 
     }
 
 
     getThreads() {
-        let threadsApi = this.props.gmailApi.threads;
-        this.threadCache.get("listThreads", threadsApi.list({
-            userId: 'me',
-            q: this.getLabelFilter(),
-            labelIds: ['INBOX']
-        })).then(response => {
-            let threads = response.result.threads.sort((a: any, b:any) => {
-                return b.historyId - a.historyId
-            });
+        gmailInstance.listThreads("listThreads", this.getLabelFilter()).then(result => {
+            let threads = result.threads || [];
             this.setState({ threads });
         });
     }
 
-    async getLabels() {
-        let labels: ILabel[] = Object.values(this.state.settings.bundleLabels);
-        let batch = window.gapi.client.newBatch();
-        labels.forEach(label => {
-            batch.add(this.props.gmailApi.labels.get({
-                id: label.id,
-                userId: 'me'
-            }));
-        });
-        let responses = await this.threadCache.get("bundleLabels", batch);
-        labels = Object.values(responses.result).map((response:any) => response.result);
-        let labelsSorted = labels.filter(label => label.threadsTotal > 0).sort((l1, l2) => l1.name.localeCompare(l2.name));
-        this.setState({ labels: labelsSorted })
+    getLabels() {
+        let labelIds: string[] = Object.values(this.state.settings.bundleLabels).map(label => label.id);
+        gmailInstance.getLabels(labelIds, "bundleLabels").then(labels => this.setState({ labels }));
+    }
+
+    archiveThread(id: string){
+        gmailInstance.archiveThread(id).then(_ =>{
+            this.setState({threads: this.state.threads.filter(thread => thread.id !== id)})
+        })
     }
 
     render() {
         const { classes } = this.props;
         return (
             <>
-                <h3>Inbox</h3>
                 <List className={classes.root}>
-                    {categories.map(category=><LabelGroup key={category} category={category} gmailApi={this.props.gmailApi}></LabelGroup>)}
-                    {this.state.labels.map(label=><LabelGroup key={label.id} label={label} gmailApi={this.props.gmailApi}></LabelGroup>)}
-                    <ThreadList threads={this.state.threads} gmailApi={this.props.gmailApi}></ThreadList>
+                    {categories.map(category => <LabelGroup key={category} category={category}></LabelGroup>)}
+                    {this.state.labels.map(label => <LabelGroup key={label.id} label={label}></LabelGroup>)}
+                    <ThreadList threads={this.state.threads} archiveThread={this.archiveThread.bind(this)}></ThreadList>
                 </List>
             </>
         )
@@ -92,7 +79,7 @@ class InboxView extends React.Component<Props, {settings: any, threads: any[], l
 
 export default withStyles(theme => ({
     root: {
-        width: '50vw',
+        width: '100%',
         overflowY: 'auto',
         backgroundColor: theme.palette.background.paper,
     },

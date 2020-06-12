@@ -22,7 +22,6 @@ export default class CacheFirst {
     async fromNetwork(request: Promise<any> | undefined, requestKey: RequestInfo) {
         if (request) {
             let response = await request;
-            console.log("from network:" + requestKey)
             this.cache?.put(new Request(requestKey), new Response(JSON.stringify(response)))
             return response;
         }
@@ -32,7 +31,6 @@ export default class CacheFirst {
     async fromCache(requestKey: RequestInfo) {
         let cachedResponse = await this.cache?.match(new Request(requestKey));
         if (cachedResponse) {
-            console.log("from cache:" + requestKey)
             return await cachedResponse.json();
         }
         throw new Error("not found in cache");

@@ -14,7 +14,7 @@
 }
 
 .messages, .labelView {
-    width: 50vw;
+    width: 100%;
     flex: 1;
     display: flex;
     flex-flow: column;
@@ -24,14 +24,14 @@
 
 
 .message {
-    width: 50vw;
+    width: 100%;
     border-bottom: 1px solid lightgrey;
     background-color: rgba(51,51,51,0.902);
 }
 
 .message.threaded {
     margin-left: 1em;
-    width: calc(50vw - 1em);
+    width: calc(100% - 1em);
 }
 
 .message.read {
