@@ -56,10 +56,14 @@ class InboxView extends React.Component<Props, { settings: ISettings, threads: a
         gmailInstance.getLabels(labelIds, "bundleLabels").then(labels => this.setState({ labels }));
     }
 
-    archiveThread(id: string){
-        gmailInstance.archiveThread(id).then(_ =>{
-            this.setState({threads: this.state.threads.filter(thread => thread.id !== id)})
+    archiveThread(id: string) {
+        gmailInstance.archiveThread(id).then(_ => {
+            this.setState({ threads: this.state.threads.filter(thread => thread.id !== id) })
         })
+    }
+
+    labelArchived(label: ILabel | string) {
+        this.setState({ labels: this.state.labels.filter(l => l.id !== (label as ILabel).id) })
     }
 
     render() {
@@ -67,8 +71,8 @@ class InboxView extends React.Component<Props, { settings: ISettings, threads: a
         return (
             <>
                 <List className={classes.root}>
-                    {categories.map(category => <LabelGroup key={category} category={category}></LabelGroup>)}
-                    {this.state.labels.map(label => <LabelGroup key={label.id} label={label}></LabelGroup>)}
+                    {categories.map(category => <LabelGroup key={category} category={category} ></LabelGroup>)}
+                    {this.state.labels.map(label => <LabelGroup key={label.id} label={label} onArchived={this.labelArchived.bind(this)}></LabelGroup>)}
                     <ThreadList threads={this.state.threads} archiveThread={this.archiveThread.bind(this)}></ThreadList>
                 </List>
             </>

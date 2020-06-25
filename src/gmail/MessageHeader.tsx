@@ -79,15 +79,16 @@ class MessageHeader extends React.Component<Props, State> {
         const from = headers["From"].replace(">", "").split("<");
         from[0] = from[0].replace(/"|\\/g, '');
         const read = !message.labelIds.includes("UNREAD");
-
+        const ref = React.createRef<HTMLDivElement>();
         return (
             <CSSTransition
                 in={this.state.mounted}
                 unmountOnExit
                 timeout={500}
                 classNames={classes.root}
+                nodeRef={ref}
             >
-                <div className={classes.root + " message " + (isThread ? "threaded " : "") + (read ? "read" : "")}>
+                <div ref={ref} className={classes.root + " message " + (isThread ? "threaded " : "") + (read ? "read" : "")}>
                     <Avatar>{from[0][0]}</Avatar>
                     <div className={classes.header}>
                         <div title={from[1]}><b>{from[0]}</b>{noOfMessages > 1 ? noOfMessages : ""}</div>
