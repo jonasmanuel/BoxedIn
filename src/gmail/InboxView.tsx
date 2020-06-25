@@ -83,7 +83,7 @@ class InboxView extends React.Component<Props, { settings: ISettings, threads: a
 
 export default withStyles(theme => ({
     root: {
-        width: '100%',
+        flex: 1,
         overflowY: 'auto',
         backgroundColor: theme.palette.background.paper,
     },

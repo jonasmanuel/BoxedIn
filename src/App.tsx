@@ -26,8 +26,8 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => {
+  return createStyles({
     root: {
       display: 'flex',
     },
@@ -39,15 +39,24 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
     },
     content: {
-      marginTop: "64px",
-      height: "calc(100vh - 64px)",
-      width: `calc(100vw - ${theme.spacing(7) + 1}px)`,
-      marginLeft: theme.spacing(7) + 1,
+      marginTop: "56px",
+      height: "calc(100vh - 56px)",
+      [theme.breakpoints.up("xs") + "and (orientation: landscape)"]:{
+        marginTop: "48px",
+        height: "calc(100vh - 48px)",
+      },
+      width: `calc(100vw - ${theme.spacing(8)}px)`,
+      marginLeft: theme.spacing(8),
+      [theme.breakpoints.up('sm')]: {
+        width: `calc(100vw - ${theme.spacing(10)}px)`,
+        marginLeft: theme.spacing(10),
+        marginTop: "64px",
+        height: "calc(100vh - 64px)",
+      },
       // flexGrow: "1",
       backgroundColor: "#111",
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
       color: "white",
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -102,8 +111,8 @@ const useStyles = makeStyles((theme: Theme) =>
     buttons: {
       marginLeft: "auto"
     }
-  }),
-);
+  })
+});
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
