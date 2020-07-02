@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/BoxedIn/static/css/main.d895bc7c.chunk.css",
-    "main.js": "/BoxedIn/static/js/main.81e215f3.chunk.js",
-    "main.js.map": "/BoxedIn/static/js/main.81e215f3.chunk.js.map",
+    "main.js": "/BoxedIn/static/js/main.39b2c0c9.chunk.js",
+    "main.js.map": "/BoxedIn/static/js/main.39b2c0c9.chunk.js.map",
     "runtime-main.js": "/BoxedIn/static/js/runtime-main.3f200c17.js",
     "runtime-main.js.map": "/BoxedIn/static/js/runtime-main.3f200c17.js.map",
-    "static/js/2.88fb8348.chunk.js": "/BoxedIn/static/js/2.88fb8348.chunk.js",
-    "static/js/2.88fb8348.chunk.js.map": "/BoxedIn/static/js/2.88fb8348.chunk.js.map",
+    "static/js/2.a2bb3de3.chunk.js": "/BoxedIn/static/js/2.a2bb3de3.chunk.js",
+    "static/js/2.a2bb3de3.chunk.js.map": "/BoxedIn/static/js/2.a2bb3de3.chunk.js.map",
     "index.html": "/BoxedIn/index.html",
-    "precache-manifest.a8d09b7ccd1fbff797e36ed472d31dc5.js": "/BoxedIn/precache-manifest.a8d09b7ccd1fbff797e36ed472d31dc5.js",
+    "precache-manifest.b968ed2e1921c7d9418be55b8878b4e1.js": "/BoxedIn/precache-manifest.b968ed2e1921c7d9418be55b8878b4e1.js",
     "service-worker.js": "/BoxedIn/service-worker.js",
     "static/css/main.d895bc7c.chunk.css.map": "/BoxedIn/static/css/main.d895bc7c.chunk.css.map",
-    "static/js/2.88fb8348.chunk.js.LICENSE.txt": "/BoxedIn/static/js/2.88fb8348.chunk.js.LICENSE.txt",
+    "static/js/2.a2bb3de3.chunk.js.LICENSE.txt": "/BoxedIn/static/js/2.a2bb3de3.chunk.js.LICENSE.txt",
     "static/media/logo.svg": "/BoxedIn/static/media/logo.ee7cd8ed.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.3f200c17.js",
-    "static/js/2.88fb8348.chunk.js",
+    "static/js/2.a2bb3de3.chunk.js",
     "static/css/main.d895bc7c.chunk.css",
-    "static/js/main.81e215f3.chunk.js"
+    "static/js/main.39b2c0c9.chunk.js"
   ]
 }
