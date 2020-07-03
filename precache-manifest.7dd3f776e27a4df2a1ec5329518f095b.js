@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "74842d62df0d968fa717aa91e612e791",
+    "revision": "29d9d7332252fc708ee8899f05eb65e2",
     "url": "/BoxedIn/index.html"
   },
   {
-    "revision": "aef610648bcf25dc4883",
+    "revision": "81455ff4211345424b5f",
     "url": "/BoxedIn/static/css/main.d895bc7c.chunk.css"
   },
   {
-    "revision": "d420a939ba168992b2ed",
-    "url": "/BoxedIn/static/js/2.a2bb3de3.chunk.js"
+    "revision": "5d96c073fc4fd287da26",
+    "url": "/BoxedIn/static/js/2.bf6da39a.chunk.js"
   },
   {
     "revision": "0749163b59fbee32225059cb60c18af6",
-    "url": "/BoxedIn/static/js/2.a2bb3de3.chunk.js.LICENSE.txt"
+    "url": "/BoxedIn/static/js/2.bf6da39a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "aef610648bcf25dc4883",
-    "url": "/BoxedIn/static/js/main.39b2c0c9.chunk.js"
+    "revision": "81455ff4211345424b5f",
+    "url": "/BoxedIn/static/js/main.0da6d410.chunk.js"
   },
   {
     "revision": "00375b453bebf6f8727e",
